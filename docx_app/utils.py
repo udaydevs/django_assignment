@@ -170,14 +170,16 @@ def generate_docx(data):
     d2 = table.rows[14].cells[0].merge(table.rows[14].cells[1]).merge(table.rows[14].cells[2])
     p2 = d2.paragraphs[0]
     p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r2 = p2.add_run("THE COMM. COURTS (PRE-INSTITUTION … SETTLEMENT) RULES, 2018")
+    r2 = p2.add_run("THE COMM. COURTS (PRE-INSTITUTION………SETTLEMENT) RULES,2018")
     r2.bold = True
+    r2.underline = True
 
     final = table.rows[15].cells[1].merge(table.rows[15].cells[2])
     r3 = final.paragraphs[0].add_run(
-        "Nature of dispute as per section 2(1)(c) of the Commercial Courts Act, 2015:"
+        "Nature of disputes as per section 2(1)(c) of the Commercial Courts Act, 2015 (4 of 2016):"
     )
     r3.bold = True
+    r3.font.size = Pt(10)
 
     for i in range(1, 14):
         p = table.cell(i, 1).paragraphs[0]
