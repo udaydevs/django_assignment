@@ -41,7 +41,7 @@ class FormData(forms.Form):
 
     )
     customer_mobile_no = forms.CharField(
-        label="Customer Telephone No.",
+        label="Customer Mobile No.",
         required=False,
         validators=[RegexValidator(r'^[6-9]\d{9}$', "Enter valid 10-digit phone number.")]
     )
