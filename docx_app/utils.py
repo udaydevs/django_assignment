@@ -69,7 +69,7 @@ def generate_docx(data):
     auth = doc.add_paragraph("Mumbai District Legal Services Authority\nCity Civil Court, Mumbai")
     auth.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    table = doc.add_table(rows=16, cols=3)
+    table = doc.add_table(rows=17, cols=3)
     table.style = "Table Grid"
     widths = [0.5, 1.5, 5.6]
     for i, width in enumerate(widths):
@@ -104,18 +104,24 @@ def generate_docx(data):
     registered = data.get("registered_address", data.get("branch_address", ""))
     correspondence = data.get("correspondence_address", data.get("branch_address", ""))
 
+    table.cell(3, 0).text = "1"
     table.cell(3, 1).text = "Address"
     addr_cell = table.cell(3, 2)
     addr_cell.text = ""
-    for heading, value in [
-        ("REGISTERED ADDRESS:\n", registered),
-        ("CORRESPONDENCE ADDRESS:\n", correspondence)
-    ]:
-        p = addr_cell.add_paragraph()
-        r = p.add_run(heading)
-        r.bold = True
-        r.font.size = Pt(11)
-        p.add_run(value).font.size = Pt(10)
+    p = addr_cell.add_paragraph()
+    r = p.add_run("REGISTERED ADDRESS:\n")
+    r.bold = True
+    r.font.size = Pt(11)
+    p.add_run(registered).font.size = Pt(10)
+
+    addr_cell.add_paragraph()
+
+    p = addr_cell.add_paragraph()
+    r = p.add_run("CORRESPONDENCE BRANCH ADDRESS:\n")
+    r.bold = True
+    r.font.size = Pt(11)
+    p.add_run(correspondence).font.size = Pt(10)
+
     addr_cell.add_paragraph()
 
     table.cell(4, 1).text = "Telephone No."
@@ -136,45 +142,59 @@ def generate_docx(data):
     run.bold = True
     run.font.size = Pt(11)
 
-    table.cell(8, 1).text = "Name"
-    table.cell(8, 2).text = data.get("customer_name", "").upper()
+    row8 = table.rows[8].cells
+    merged = row8[1].merge(row8[2])
+    run = merged.paragraphs[0].add_run("Address and contact details of Defendant/s")
+    run.bold = True
+    run.font.size = Pt(11)
+
+    table.cell(9, 1).text = "Name"
+    table.cell(9, 2).text = data.get("customer_name", "").upper()
 
     party_addr = data.get("customer_address", "").strip() or "________________________"
-    table.cell(9, 1).text = "Address"
-    cell = table.cell(9, 2)
+    table.cell(10, 1).text = "Address"
+    cell = table.cell(10, 2)
     cell.text = ""
-    for head in ["REGISTERED ADDRESS", "CORRESPONDENCE ADDRESS"]:
-        p = cell.add_paragraph()
-        r = p.add_run(f"{head}:\n")
-        r.bold = True
-        r.font.size = Pt(11)
-        p.add_run(party_addr).font.size = Pt(10)
+    p = cell.add_paragraph()
+    r = p.add_run("REGISTERED ADDRESS:\n")
+    r.bold = True
+    r.font.size = Pt(11)
+    p.add_run(party_addr).font.size = Pt(10)
+
     cell.add_paragraph()
 
-    table.cell(10, 1).text = "Telephone No."
-    table.cell(10, 2).text = data.get("customer_tele_no", "")
+    p2 = cell.add_paragraph()
+    r2 = p2.add_run("CORRESPONDENCE ADDRESS:\n")
+    r2.bold = True
+    r2.font.size = Pt(11)
+    p2.add_run(party_addr).font.size = Pt(10)
 
-    table.cell(11, 1).text = "Mobile No."
-    table.cell(11, 2).text = data.get("customer_mobile", "")
+    cell.add_paragraph()
 
-    table.cell(12, 1).text = "Email ID"
-    table.cell(12, 2).text = data.get("customer_email", "")
+    table.cell(11, 1).text = "Telephone No."
+    table.cell(11, 2).text = data.get("customer_tele_no", "")
 
-    dispute_head = table.rows[13].cells[0].merge(
-        table.rows[13].cells[1]
-    ).merge(table.rows[13].cells[2])
+    table.cell(12, 1).text = "Mobile No."
+    table.cell(12, 2).text = data.get("customer_mobile", "")
+
+    table.cell(13, 1).text = "Email ID"
+    table.cell(13, 2).text = data.get("customer_email", "")
+
+    dispute_head = table.rows[14].cells[0].merge(
+        table.rows[14].cells[1]
+    ).merge(table.rows[14].cells[2])
     rh = dispute_head.paragraphs[0].add_run("DETAILS OF DISPUTE:")
     rh.bold = True
     rh.font.size = Pt(12)
 
-    d2 = table.rows[14].cells[0].merge(table.rows[14].cells[1]).merge(table.rows[14].cells[2])
+    d2 = table.rows[15].cells[0].merge(table.rows[15].cells[1]).merge(table.rows[15].cells[2])
     p2 = d2.paragraphs[0]
     p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r2 = p2.add_run("THE COMM. COURTS (PRE-INSTITUTION………SETTLEMENT) RULES,2018")
     r2.bold = True
     r2.underline = True
 
-    final = table.rows[15].cells[1].merge(table.rows[15].cells[2])
+    final = table.rows[16].cells[1].merge(table.rows[16].cells[2])
     r3 = final.paragraphs[0].add_run(
         "Nature of disputes as per section 2(1)(c) of the Commercial Courts Act, 2015 (4 of 2016):"
     )
