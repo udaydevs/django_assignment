@@ -178,7 +178,9 @@ def generate_docx(data):
     table.cell(12, 2).text = data.get("customer_mobile_no", "")
 
     table.cell(13, 1).text = "Email ID"
-    table.cell(13, 2).text = data.get("customer_email", "")
+    email_p = table.cell(13, 2).paragraphs[0]
+    email = data.get("customer_email", "")
+    add_hyperlink(email_p, email, f"mailto:{email}")
 
     dispute_head = table.rows[14].cells[0].merge(
         table.rows[14].cells[1]
