@@ -175,7 +175,7 @@ def generate_docx(data):
     table.cell(11, 2).text = data.get("customer_tele_no", "")
 
     table.cell(12, 1).text = "Mobile No."
-    table.cell(12, 2).text = data.get("customer_mobile", "")
+    table.cell(12, 2).text = data.get("customer_mobile_no", "")
 
     table.cell(13, 1).text = "Email ID"
     table.cell(13, 2).text = data.get("customer_email", "")
